@@ -1,0 +1,74 @@
+import React, { useState, useEffect } from 'react';
+import './MainPage.css';
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import TextField from '@mui/material/TextField';
+import withRequest from "../../core/withRequest";
+import Card from '@mui/material/Card';
+// import CardMedia from '@mui/material/CardMedia';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import CardActions from '@mui/material/CardActions';
+import Button from '@mui/material/Button';
+
+interface Data {
+    name: string;
+    url: string;
+}
+
+interface Props {
+    data: Data[]
+}
+
+const MainPage = (props: Props) => {
+    const [currentData, setStateData] = useState<Data[]>([]);
+
+    useEffect(() => {
+        if (props.data.length > 0) console.log('props.data=',props.data)
+        setStateData(props.data);
+    }, [props.data]);
+
+    const handleSearch = (text: string) => {
+        const filtedData = props.data.filter(item => item.name.toLowerCase().includes(text.toLowerCase()));
+        console.log('filtedData=',filtedData)
+        setStateData(filtedData);
+        console.log('currentData=',currentData)
+    };
+
+    const handleClickItem = (url: string) => {
+        console.log('url=',url)
+        window.open(url, '_blank', 'noopener,noreferrer');
+    };
+
+    return (
+        <Box sx={{ height: '88vh' }}>
+            <Paper variant="outlined" sx={{ height: '100%', padding: '1rem' }}>
+                {/* <div style={{ padding: '1rem' }}>Main Page</div> */}
+                <div style={{ padding: '1rem' }}>
+                    <TextField id="outlined-basic" label="Search" variant="outlined" fullWidth onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleSearch(event.target.value)} />
+                </div>
+
+                <Box display="grid" gridTemplateColumns="repeat(auto-fit, minmax(250px, 1fr))" gap="1rem">
+                    {currentData.map((item, index) => (
+                        <Card sx={{ maxWidth: 345, margin: '1rem' }} key={index}>
+                        <CardContent>
+                            <Typography gutterBottom variant="h5" component="div">
+                            {item.name}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                            {item.url}
+                            </Typography>
+                        </CardContent>
+                        <CardActions>
+                            <Button size="small" onClick={() => handleClickItem(item.url)}>Go</Button>
+                        </CardActions>
+                        </Card>
+                    ))}
+                </Box>
+            </Paper>
+        </Box>
+    )
+}
+
+// export default MainPage;
+export default withRequest("getData")(MainPage);
