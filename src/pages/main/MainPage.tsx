@@ -22,6 +22,7 @@ const MainPage = (props: Props) => {
     const [originalData, setOriginalData] = useState<Data[]>([]);
     const [currentData, setCurrentData] = useState<Data[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [isDataFound, setIsDataFound] = useState(true);
     // const [imageUrl, setImageUrl] = useState('');
     // const [authInstance, setAuthInstance] = useState<gapi.auth2.GoogleAuth | null>(null);
 
@@ -115,9 +116,11 @@ const MainPage = (props: Props) => {
     };
 
     const handleSearch = (text: string) => {
+        setIsDataFound(true);
         const filtedData = originalData.filter(item => item.name.toLowerCase().includes(text.toLowerCase()) || item.description.toLowerCase().includes(text.toLowerCase()));
         console.log('filtedData=',filtedData)
         setCurrentData(filtedData);
+        setIsDataFound(filtedData.length > 0 ? true : false);
         console.log('currentData=',currentData)
     };
 
@@ -133,9 +136,9 @@ const MainPage = (props: Props) => {
                 )}
                 {/* <div style={{ padding: '1rem' }}>Main Page</div> */}
                 {!isLoading && (
-                    <Paper variant="outlined" sx={{ height: '100%', padding: '2rem' }}>
+                    <Paper variant="outlined" sx={{ padding: '2rem' }}>
                         <div style={{ padding: '1rem' }}>
-                            <TextField id="outlined-basic" label="Search" variant="outlined" fullWidth onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleSearch(event.target.value)} />
+                            <TextField id="outlined-basic" label="กรอกชื่อสินค้าเพื่อค้นหา" variant="outlined" fullWidth onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleSearch(event.target.value)} placeholder='พิมพิ์ชื่อหรือคำค้นหาเกี่ยวกับสินค้าที่คุณต้องการ'/>
                         </div>
 
                         <Box display="grid" gridTemplateColumns="repeat(auto-fit, minmax(250px, 1fr))" gap="1rem">
@@ -159,6 +162,11 @@ const MainPage = (props: Props) => {
                                 </Card>
                             ))}
                         </Box>
+                        {!isDataFound && (
+                            <Box display="grid" gridTemplateColumns="repeat(auto-fit, minmax(250px, 1fr))" gap="1rem">
+                                ไม่มีข้อมูล (No Data Found)
+                            </Box>
+                        )}
                     </Paper>
                 )}
         </Box>
