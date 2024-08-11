@@ -57,14 +57,14 @@ export const Header = () => {
                         },
                     }}
                 />
-                <BottomNavigationAction label="Category" icon={<CategoryIcon />} onClick={() => handleClick('/category')} 
+                {/* <BottomNavigationAction label="Category" icon={<CategoryIcon />} onClick={() => handleClick('/category')} 
                     sx={{
                         color: 'gray', // Normal color
                         '&.Mui-selected': {
                         color: 'white', // Color when selected
                         },
                     }}
-                />
+                /> */}
             </BottomNavigation>
         </Box>
     )

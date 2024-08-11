@@ -146,6 +146,7 @@ const MainPage = (props: Props) => {
                             {currentData.map((item, index) => (
                                 <Card sx={{ maxWidth: 345, margin: '1rem' }} key={index}>
                                 <CardContent>
+                                    {/* {index} */}
                                     {item.img.startsWith('data:image/png;base64') && (
                                         <CardMedia component="img" height="150" image={item.img} alt="" sx={{marginBottom: '1rem', width: '70%', margin: '0 auto'}} />
                                     )}

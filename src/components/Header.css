@@ -29,10 +29,3 @@
     /* background-color: beige; */
     background-color: transparent;
 }
-
-.custom-bottom-nav-action {
-    color: gray; /* Normal color */
-}
-.custom-bottom-nav-action.Mui-selected {
-    color: white; /* Color when selected */
-}
