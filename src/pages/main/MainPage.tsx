@@ -25,7 +25,9 @@ interface Props {
 const MainPage = (props: Props) => {
     const [currentData, setStateData] = useState<Data[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [imageUrl, setImageUrl] = useState('');
+    const [imageUrl, setImageUrl] = useState('');    
+    const [authInstance, setAuthInstance] = useState<gapi.auth2.GoogleAuth | null>(null);
+
 
     const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
     const API_KEY = process.env.REACT_APP_API_KEY;
@@ -40,20 +42,48 @@ const MainPage = (props: Props) => {
             scope: SCOPES,
           }).then(() => {
             console.log('GAPI client initialized');
-            gapi.auth2.getAuthInstance().signIn().then(() => {
-                gapi.client.drive.files.get({
-                  fileId: '1bJ4pMId-rNJmdiYp0JzUhrXYJch_OPE-',
-                  alt: 'media',
-                }).then((response: any) => {
-                  setImageUrl(response.result.webContentLink);
-                });
-            });
+            setAuthInstance(gapi.auth2.getAuthInstance());
+            gapi.client.load('drive', 'v3').then(() => {
+                console.log('Drive API loaded');
+                handleSignIn();
+              }).catch(error => {
+                console.error('Error loading Drive API:', error);
+              });
           }).catch((error: any) => {
             console.error('Error initializing GAPI client', error);
           });
         };
         gapi.load('client:auth2', initClient);
     }, []);
+
+    const handleSignIn = () => {
+        if (authInstance) {
+          authInstance.signIn().then(() => {
+            console.log('User signed in');
+            fetchImage();
+          }).catch((error: any) => {
+            console.error('Error signing in:', error);
+          });
+        } else {
+          console.error('Auth instance is not available');
+        }
+    };
+
+    const fetchImage = () => {
+        if ((gapi.client as any).drive) {
+          (gapi.client as any).drive.files.get({
+            fileId: '1bJ4pMId-rNJmdiYp0JzUhrXYJch_OPE-', // Replace with your file ID
+            alt: 'media',
+          }).then((response: any) => {
+            // Update the image URL state
+            setImageUrl(response.body);
+          }).catch((error: any) => {
+            console.error('Error fetching image:', error);
+          });
+        } else {
+          console.error('Drive API client is not loaded');
+        }
+    };
 
     useEffect(() => {
         if (props.data.length > 0) setIsLoading(false);
