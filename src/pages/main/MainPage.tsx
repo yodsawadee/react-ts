@@ -1,21 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import './MainPage.css';
 import withRequest from "../../core/withRequest";
-// import Box from '@mui/material/Box';
-// import Paper from '@mui/material/Paper';
-// import TextField from '@mui/material/TextField';
-// import Card from '@mui/material/Card';
-// import CardMedia from '@mui/material/CardMedia';
-// import CardContent from '@mui/material/CardContent';
-// import Typography from '@mui/material/Typography';
-// import CardActions from '@mui/material/CardActions';
-// import Button from '@mui/material/Button';
 import { Box, Paper, TextField, Card, CardContent, CardMedia, CardActions, Typography, Button, CircularProgress } from "@mui/material";
-import { gapi } from 'gapi-script';
+// import { gapi } from 'gapi-script';
+import images from '../../core/imageLoader';
 
 interface Data {
     name: string;
     url: string;
+    description: string;
+    price: string;
+    img: string
 }
 
 interface Props {
@@ -23,77 +18,92 @@ interface Props {
 }
 
 const MainPage = (props: Props) => {
-    const [currentData, setStateData] = useState<Data[]>([]);
+    const [originalData, setOriginalData] = useState<Data[]>([]);
+    const [currentData, setCurrentData] = useState<Data[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [imageUrl, setImageUrl] = useState('');    
-    const [authInstance, setAuthInstance] = useState<gapi.auth2.GoogleAuth | null>(null);
+    // const [imageUrl, setImageUrl] = useState('');
+    // const [authInstance, setAuthInstance] = useState<gapi.auth2.GoogleAuth | null>(null);
 
 
-    const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
-    const API_KEY = process.env.REACT_APP_API_KEY;
-    const SCOPES = 'https://www.googleapis.com/auth/drive.file';
+    // const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
+    // const API_KEY = process.env.REACT_APP_API_KEY;
+    // const SCOPES = 'https://www.googleapis.com/auth/drive.file';
 
-    useEffect(() => {
-        const initClient = () => {
-          gapi.client.init({
-            apiKey: API_KEY,
-            clientId: CLIENT_ID,
-            discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
-            scope: SCOPES,
-          }).then(() => {
-            console.log('GAPI client initialized');
-            setAuthInstance(gapi.auth2.getAuthInstance());
-            gapi.client.load('drive', 'v3').then(() => {
-                console.log('Drive API loaded');
-                handleSignIn();
-              }).catch(error => {
-                console.error('Error loading Drive API:', error);
-              });
-          }).catch((error: any) => {
-            console.error('Error initializing GAPI client', error);
-          });
-        };
-        gapi.load('client:auth2', initClient);
-    }, []);
+    // useEffect(() => {
+    //     const initClient = () => {
+    //       gapi.client.init({
+    //         apiKey: API_KEY,
+    //         clientId: CLIENT_ID,
+    //         discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
+    //         scope: SCOPES,
+    //       }).then(() => {
+    //         console.log('GAPI client initialized');
+    //         setAuthInstance(gapi.auth2.getAuthInstance());
+    //         gapi.client.load('drive', 'v3').then(() => {
+    //             console.log('Drive API loaded');
+    //             handleSignIn();
+    //           }).catch(error => {
+    //             console.error('Error loading Drive API:', error);
+    //           });
+    //       }).catch((error: any) => {
+    //         console.error('Error initializing GAPI client', error);
+    //       });
+    //     };
+    //     gapi.load('client:auth2', initClient);
+    // }, []);
 
-    const handleSignIn = () => {
-        if (authInstance) {
-          authInstance.signIn().then(() => {
-            console.log('User signed in');
-            fetchImage();
-          }).catch((error: any) => {
-            console.error('Error signing in:', error);
-          });
-        } else {
-          console.error('Auth instance is not available');
-        }
-    };
+    // const handleSignIn = () => {
+    //     if (authInstance) {
+    //       authInstance.signIn().then(() => {
+    //         console.log('User signed in');
+    //         fetchImage();
+    //       }).catch((error: any) => {
+    //         console.error('Error signing in:', error);
+    //       });
+    //     } else {
+    //       console.error('Auth instance is not available');
+    //     }
+    // };
 
-    const fetchImage = () => {
-        if ((gapi.client as any).drive) {
-          (gapi.client as any).drive.files.get({
-            fileId: '1bJ4pMId-rNJmdiYp0JzUhrXYJch_OPE-', // Replace with your file ID
-            alt: 'media',
-          }).then((response: any) => {
-            // Update the image URL state
-            setImageUrl(response.body);
-          }).catch((error: any) => {
-            console.error('Error fetching image:', error);
-          });
-        } else {
-          console.error('Drive API client is not loaded');
-        }
-    };
+    // const fetchImage = () => {
+    //     if ((gapi.client as any).drive) {
+    //       (gapi.client as any).drive.files.get({
+    //         fileId: '1bJ4pMId-rNJmdiYp0JzUhrXYJch_OPE-', // Replace with your file ID
+    //         alt: 'media',
+    //       }).then((response: any) => {
+    //         // Update the image URL state
+    //         setImageUrl(response.body);
+    //       }).catch((error: any) => {
+    //         console.error('Error fetching image:', error);
+    //       });
+    //     } else {
+    //       console.error('Drive API client is not loaded');
+    //     }
+    // };
 
     useEffect(() => {
         if (props.data.length > 0) setIsLoading(false);
-        setStateData(props.data);
+        const imgList = Object.keys(images).map((key) => images[key]);
+        const dataAfterAddImg = props.data.map((item, index) => {
+            console.log('index', index)
+            return {
+                name: item.name,
+                url: item.url,
+                price: item.price,
+                description: item.description,
+                img: imgList[index]
+            }
+        });
+        setOriginalData(dataAfterAddImg);
+        setCurrentData(dataAfterAddImg);
+        console.log('dataAfterAddImg',dataAfterAddImg)
+        // setImageUrl(exampleImage);
     }, [props.data]);
 
     const handleSearch = (text: string) => {
-        const filtedData = props.data.filter(item => item.name.toLowerCase().includes(text.toLowerCase()));
+        const filtedData = originalData.filter(item => item.name.toLowerCase().includes(text.toLowerCase()) || item.description.toLowerCase().includes(text.toLowerCase()));
         console.log('filtedData=',filtedData)
-        setStateData(filtedData);
+        setCurrentData(filtedData);
         console.log('currentData=',currentData)
     };
 
@@ -104,7 +114,6 @@ const MainPage = (props: Props) => {
 
     return (
         <Box sx={{ height: '88vh' }}>
-            {/* <Paper variant="outlined" sx={{ height: '100%', padding: '1rem' }}> */}
                 {isLoading && (
                     <CircularProgress color="primary" size="3rem" thickness={5} sx={{ padding: '2rem' }} />
                 )}
@@ -122,14 +131,14 @@ const MainPage = (props: Props) => {
                                     <CardMedia
                                         component="img"
                                         height="140"
-                                        image={imageUrl}
-                                        alt="Google Drive Image"
+                                        image={item.img}
+                                        alt=""
                                     />
                                     <Typography gutterBottom variant="h5" component="div">
                                     {item.name}
                                     </Typography>
                                     <Typography variant="body2" color="text.secondary">
-                                    {item.url}
+                                    {item.description}
                                     </Typography>
                                 </CardContent>
                                 <CardActions>
@@ -140,28 +149,6 @@ const MainPage = (props: Props) => {
                         </Box>
                     </Paper>
                 )}
-                {/* <div style={{ padding: '1rem' }}>
-                    <TextField id="outlined-basic" label="Search" variant="outlined" fullWidth onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleSearch(event.target.value)} />
-                </div>
-
-                <Box display="grid" gridTemplateColumns="repeat(auto-fit, minmax(250px, 1fr))" gap="1rem">
-                    {currentData.map((item, index) => (
-                        <Card sx={{ maxWidth: 345, margin: '1rem' }} key={index}>
-                        <CardContent>
-                            <Typography gutterBottom variant="h5" component="div">
-                            {item.name}
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary">
-                            {item.url}
-                            </Typography>
-                        </CardContent>
-                        <CardActions>
-                            <Button size="small" onClick={() => handleClickItem(item.url)}>Go</Button>
-                        </CardActions>
-                        </Card>
-                    ))}
-                </Box> */}
-            {/* </Paper> */}
         </Box>
     )
 }
