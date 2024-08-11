@@ -136,22 +136,22 @@ const MainPage = (props: Props) => {
                 )}
                 {/* <div style={{ padding: '1rem' }}>Main Page</div> */}
                 {!isLoading && (
-                    <Paper variant="outlined" sx={{ padding: '2rem' }}>
+                    // <Paper variant="outlined" sx={{ padding: '2rem' }}>
+                    <div>
                         <div style={{ padding: '1rem' }}>
-                            <TextField id="outlined-basic" label="กรอกชื่อสินค้าเพื่อค้นหา" variant="outlined" fullWidth onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleSearch(event.target.value)} placeholder='พิมพิ์ชื่อหรือคำค้นหาเกี่ยวกับสินค้าที่คุณต้องการ'/>
+                            <TextField id="outlined-basic" label="กรอกชื่อสินค้าเพื่อค้นหา" variant="outlined" fullWidth onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleSearch(event.target.value)} placeholder='พิมพิ์ชื่อหรือคำค้นหาเกี่ยวกับสินค้า'/>
                         </div>
 
                         <Box display="grid" gridTemplateColumns="repeat(auto-fit, minmax(250px, 1fr))" gap="1rem">
                             {currentData.map((item, index) => (
                                 <Card sx={{ maxWidth: 345, margin: '1rem' }} key={index}>
                                 <CardContent>
-                                    <CardMedia
-                                        component="img"
-                                        height="250"
-                                        image={item.img}
-                                        alt=""
-                                        sx={{marginBottom: '1rem'}}
-                                    />
+                                    {item.img.startsWith('data:image/png;base64') && (
+                                        <CardMedia component="img" height="150" image={item.img} alt="" sx={{marginBottom: '1rem', width: '70%', margin: '0 auto'}} />
+                                    )}
+                                    {item.img.startsWith('/static/') && (
+                                        <CardMedia component="img" height="250" image={item.img} alt="" sx={{marginBottom: '1rem'}} />
+                                    )}
                                     <Typography gutterBottom variant="h5" component="div">{item.price}</Typography>
                                     <Typography gutterBottom variant="h6" component="div">{item.name}</Typography>
                                     <Typography variant="body2" color="text.secondary">{item.description}</Typography>
@@ -167,7 +167,8 @@ const MainPage = (props: Props) => {
                                 ไม่มีข้อมูล (No Data Found)
                             </Box>
                         )}
-                    </Paper>
+                    </div>
+                    // </Paper>
                 )}
         </Box>
     )

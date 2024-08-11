@@ -36,3 +36,24 @@
     transform: rotate(360deg);
   }
 }
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: linear-gradient(to top, #ffe1cf, #ffffff);
+  background-attachment: fixed;
+  background-size: cover;
+  text-align: center;
+}
+
+/* .app-content {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+} */

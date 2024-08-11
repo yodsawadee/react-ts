@@ -2,11 +2,11 @@ import * as React from 'react';
 import './Header.css';
 import { useNavigate } from 'react-router-dom';
 // import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import BottomNavigation from '@mui/material/BottomNavigation';
-import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import { Box, BottomNavigation, BottomNavigationAction,  Typography } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import CategoryIcon from '@mui/icons-material/Category';
+import backgroundImage from '../assets/images/bg.jpg';
+import { Opacity } from '@mui/icons-material';
 
 export const Header = () => {
     const [value, setValue] = React.useState(0);
@@ -31,18 +31,40 @@ export const Header = () => {
         //     </Grid>
         // </nav>
 
-        <Box className="box-container">
-            {/* <div className='header'>สินค้าแนะนำ</div> */}
-            <h1 className='header'>สินค้าแนะนำ</h1>
+        <Box className="box-container" style={{
+            backgroundImage: `url(${backgroundImage})`,
+            backgroundSize: 'cover', // or 'contain' depending on your needs
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center',
+            height: '20vh', // Adjust this as necessary
+            width: '100%',
+            opacity: '0.8'
+          }}>
+            <Typography variant="h4" sx={{paddingTop: '1.5rem', paddingBottom: '1rem', color: 'white'}}>สินค้าแนะนำ</Typography>
             <BottomNavigation
                 showLabels
                 value={value}
                 onChange={(event, newValue) => {
                     setValue(newValue);
                 }}
+                sx={{backgroundColor: 'transparent'}}
             >
-                <BottomNavigationAction label="Home" icon={<HomeIcon />} onClick={() => handleClick('/')} />
-                <BottomNavigationAction label="Category" icon={<CategoryIcon />} onClick={() => handleClick('/category')} />
+                <BottomNavigationAction label="Home" icon={<HomeIcon />} onClick={() => handleClick('/')} 
+                    sx={{
+                        color: 'gray', // Normal color
+                        '&.Mui-selected': {
+                        color: 'white', // Color when selected
+                        },
+                    }}
+                />
+                <BottomNavigationAction label="Category" icon={<CategoryIcon />} onClick={() => handleClick('/category')} 
+                    sx={{
+                        color: 'gray', // Normal color
+                        '&.Mui-selected': {
+                        color: 'white', // Color when selected
+                        },
+                    }}
+                />
             </BottomNavigation>
         </Box>
     )
