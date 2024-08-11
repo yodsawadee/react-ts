@@ -82,22 +82,25 @@ const MainPage = (props: Props) => {
     // };
 
     useEffect(() => {
-        if (props.data.length > 0) setIsLoading(false);
-        const imgList = Object.keys(images).map((key) => images[key]);
-        const dataAfterAddImg = props.data.map((item, index) => {
-            console.log('index', index)
-            return {
-                name: item.name,
-                url: item.url,
-                price: item.price,
-                description: item.description,
-                img: imgList[index]
-            }
-        });
-        setOriginalData(dataAfterAddImg);
-        setCurrentData(dataAfterAddImg);
-        console.log('dataAfterAddImg',dataAfterAddImg)
-        // setImageUrl(exampleImage);
+        if (props.data.length > 0) {
+            setIsLoading(false);
+            const imgList = Object.keys(images).map((key) => images[key]);
+            console.log('imgList length', imgList.length)
+            const dataAfterAddImg = props.data.map((item, index) => {
+                // console.log('index', index)
+                return {
+                    name: item.name,
+                    url: item.url,
+                    price: item.price,
+                    description: item.description,
+                    img: imgList[index]
+                }
+            });
+            setOriginalData(dataAfterAddImg);
+            setCurrentData(dataAfterAddImg);
+            console.log('dataAfterAddImg',dataAfterAddImg)
+            // setImageUrl(exampleImage);
+        }
     }, [props.data]);
 
     const handleSearch = (text: string) => {
@@ -133,15 +136,13 @@ const MainPage = (props: Props) => {
                                         height="140"
                                         image={item.img}
                                         alt=""
+                                        sx={{marginBottom: '1rem'}}
                                     />
-                                    <Typography gutterBottom variant="h5" component="div">
-                                    {item.name}
-                                    </Typography>
-                                    <Typography variant="body2" color="text.secondary">
-                                    {item.description}
-                                    </Typography>
+                                    <Typography gutterBottom variant="h5" component="div">{item.price}</Typography>
+                                    <Typography gutterBottom variant="h6" component="div">{item.name}</Typography>
+                                    <Typography variant="body2" color="text.secondary">{item.description}</Typography>
                                 </CardContent>
-                                <CardActions>
+                                <CardActions sx={{justifyContent: 'center'}}>
                                     <Button size="small" onClick={() => handleClickItem(item.url)}>Go</Button>
                                 </CardActions>
                                 </Card>
