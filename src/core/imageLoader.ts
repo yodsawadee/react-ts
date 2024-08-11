@@ -6,6 +6,6 @@ function importAll(r: __WebpackModuleApi.RequireContext) {
     return images;
   }
   
-const images = importAll(require.context('../assets/images', false, /\.(jpg|jpeg|png)$/));
+const images = importAll(require.context('../assets/images/products', false, /\.(jpg|jpeg|png)$/));
   
 export default images;

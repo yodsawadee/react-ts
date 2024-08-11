@@ -4,6 +4,7 @@ import withRequest from "../../core/withRequest";
 import { Box, Paper, TextField, Card, CardContent, CardMedia, CardActions, Typography, Button, CircularProgress } from "@mui/material";
 // import { gapi } from 'gapi-script';
 import images from '../../core/imageLoader';
+import noImage from '../../assets/images/no-image.png';
 
 interface Data {
     name: string;
@@ -93,7 +94,8 @@ const MainPage = (props: Props) => {
                     url: item.url,
                     price: item.price,
                     description: item.description,
-                    img: imgList[index]
+                    img: getImage(imgList, index)
+                    
                 }
             });
             setOriginalData(dataAfterAddImg);
@@ -102,6 +104,15 @@ const MainPage = (props: Props) => {
             // setImageUrl(exampleImage);
         }
     }, [props.data]);
+
+    const getImage = (imgList: string[], index: number) => {
+        if (imgList.length > index) {
+            return imgList[index];
+        } else {
+            return noImage;
+        }
+        
+    };
 
     const handleSearch = (text: string) => {
         const filtedData = originalData.filter(item => item.name.toLowerCase().includes(text.toLowerCase()) || item.description.toLowerCase().includes(text.toLowerCase()));
@@ -133,7 +144,7 @@ const MainPage = (props: Props) => {
                                 <CardContent>
                                     <CardMedia
                                         component="img"
-                                        height="140"
+                                        height="250"
                                         image={item.img}
                                         alt=""
                                         sx={{marginBottom: '1rem'}}
