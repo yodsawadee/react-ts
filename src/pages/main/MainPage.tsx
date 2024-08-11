@@ -91,10 +91,10 @@ const MainPage = (props: Props) => {
             const dataAfterAddImg = props.data.map((item, index) => {
                 // console.log('index', index)
                 return {
-                    name: item.name,
-                    url: item.url,
-                    price: item.price,
-                    description: item.description,
+                    name: item.name ? item.name : '',
+                    url: item.url ? item.url : '',
+                    price: item.price ? item.price : '',
+                    description: item.description ? item.description : '',
                     img: getImage(imgList, index)
                     
                 }
