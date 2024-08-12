@@ -2,11 +2,10 @@ import * as React from 'react';
 import './Header.css';
 import { useNavigate } from 'react-router-dom';
 // import Grid from '@mui/material/Grid';
-import { Box, BottomNavigation, BottomNavigationAction,  Typography } from '@mui/material';
+import { Box, BottomNavigation, BottomNavigationAction, Typography } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import CategoryIcon from '@mui/icons-material/Category';
 import backgroundImage from '../assets/images/bg.jpg';
-import { Opacity } from '@mui/icons-material';
 
 export const Header = () => {
     const [value, setValue] = React.useState(0);
@@ -36,11 +35,14 @@ export const Header = () => {
             backgroundSize: 'cover', // or 'contain' depending on your needs
             backgroundRepeat: 'no-repeat',
             backgroundPosition: 'center',
-            height: '20vh', // Adjust this as necessary
+            height: '18vh', // Adjust this as necessary
             width: '100%',
-            opacity: '0.8'
+            opacity: '1'
           }}>
-            <Typography variant="h4" sx={{paddingTop: '1.5rem', paddingBottom: '1rem', color: 'white'}}>สินค้าแนะนำ</Typography>
+            <div style={{ paddingTop: '1.5rem', paddingBottom: '0.3rem', color: 'black' }}>
+                <h1 style={{ display: 'inline', padding: '0.25rem 1.5rem', background: 'white', opacity: '0.7', border: '2px white solid' }}>สินค้าแนะนำ</h1>
+            </div>
+            {/* <Typography variant="h4" sx={{paddingTop: '1.5rem', paddingBottom: '1rem', color: 'white'}}>สินค้าแนะนำ</Typography> */}
             <BottomNavigation
                 showLabels
                 value={value}

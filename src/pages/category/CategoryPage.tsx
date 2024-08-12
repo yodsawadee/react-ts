@@ -1,3 +1,4 @@
+import withRequest from '../../core/withRequest';
 import './CategoryPage.css';
 import Box from '@mui/material/Box';
 // import Paper from '@mui/material/Paper';
@@ -14,4 +15,5 @@ const CategoryPage = (props: Props) => {
     )
 }
 
-export default CategoryPage;
+// export default CategoryPage;
+export default withRequest("getData/GroupByCategory")(CategoryPage);

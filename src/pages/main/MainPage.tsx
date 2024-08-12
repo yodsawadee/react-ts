@@ -151,7 +151,7 @@ const MainPage = (props: Props) => {
                                         <CardMedia component="img" height="150" image={item.img} alt="" sx={{marginBottom: '1rem', width: '70%', margin: '0 auto'}} />
                                     )}
                                     {item.img.startsWith('/static/') && (
-                                        <CardMedia component="img" height="250" image={item.img} alt="" sx={{marginBottom: '1rem'}} />
+                                        <CardMedia component="img" height="300" image={item.img} alt="" sx={{marginBottom: '1rem'}} />
                                     )}
                                     <Typography gutterBottom variant="h5" component="div">{item.price}</Typography>
                                     <Typography gutterBottom variant="h6" component="div">{item.name}</Typography>
