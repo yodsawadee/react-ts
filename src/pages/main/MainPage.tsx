@@ -11,7 +11,7 @@ interface Data {
     url: string;
     description: string;
     price: string;
-    img: string
+    image: string
 }
 
 interface Props {
@@ -86,8 +86,7 @@ const MainPage = (props: Props) => {
     useEffect(() => {
         if (props.data.length > 0) {
             setIsLoading(false);
-            const imgList = Object.keys(images).map((key) => images[key]);
-            console.log('imgList length', imgList.length)
+            console.log('images', images)
             const dataAfterAddImg = props.data.map((item, index) => {
                 // console.log('index', index)
                 return {
@@ -95,8 +94,7 @@ const MainPage = (props: Props) => {
                     url: item.url ? item.url : '',
                     price: item.price ? item.price : '',
                     description: item.description ? item.description : '',
-                    img: getImage(imgList, index)
-                    
+                    image: getImageByName(item.image)
                 }
             });
             setOriginalData(dataAfterAddImg);
@@ -106,13 +104,11 @@ const MainPage = (props: Props) => {
         }
     }, [props.data]);
 
-    const getImage = (imgList: string[], index: number) => {
-        if (imgList.length > index) {
-            return imgList[index];
-        } else {
-            return noImage;
-        }
-        
+    const getImageByName = (name: string) => {
+        const formatedImageName = name+'.png';
+        // console.log('name',formatedImageName)
+        // console.log('images[name]',images[formatedImageName])
+        return images[formatedImageName]|| noImage;
     };
 
     const handleSearch = (text: string) => {
@@ -147,11 +143,11 @@ const MainPage = (props: Props) => {
                                 <Card sx={{ maxWidth: 345, margin: '1rem' }} key={index}>
                                 <CardContent>
                                     {/* {index} */}
-                                    {item.img.startsWith('data:image/png;base64') && (
-                                        <CardMedia component="img" height="150" image={item.img} alt="" sx={{marginBottom: '1rem', width: '70%', margin: '0 auto'}} />
+                                    {item.image.startsWith('data:image/png;base64') && (
+                                        <CardMedia component="img" height="150" image={item.image} alt="" sx={{marginBottom: '1rem', width: '70%', margin: '0 auto'}} />
                                     )}
-                                    {item.img.startsWith('/static/') && (
-                                        <CardMedia component="img" height="300" image={item.img} alt="" sx={{marginBottom: '1rem'}} />
+                                    {item.image.startsWith('/static/') && (
+                                        <CardMedia component="img" height="300" image={item.image} alt="" sx={{marginBottom: '1rem'}} />
                                     )}
                                     <Typography gutterBottom variant="h5" component="div">{item.price}</Typography>
                                     <Typography gutterBottom variant="h6" component="div">{item.name}</Typography>
