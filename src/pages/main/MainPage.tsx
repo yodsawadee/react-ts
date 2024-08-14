@@ -120,9 +120,19 @@ const MainPage = (props: Props) => {
         console.log('currentData=',currentData)
     };
 
-    const handleClickItem = (url: string) => {
+    const handleClickItem = (url: string, type: string) => {
         console.log('url=',url)
-        window.open(url, '_blank', 'noopener,noreferrer');
+        if (type === 'new_tab') {
+            window.open(url, '_blank', 'noopener,noreferrer');
+        } else {
+            if (window.top) {
+                window.top.location.href = url;
+            } else {
+                // Handle the case where window.top is null or undefined
+                console.error('window.top is null or undefined');
+                window.location.href = url;
+            }
+        }
     };
 
     return (
@@ -154,7 +164,8 @@ const MainPage = (props: Props) => {
                                     <Typography variant="body2" color="text.secondary">{item.description}</Typography>
                                 </CardContent>
                                 <CardActions sx={{justifyContent: 'center'}}>
-                                    <Button size="small" onClick={() => handleClickItem(item.url)}>Go</Button>
+                                    <Button size="small" onClick={() => handleClickItem(item.url, 'go')}>ไปที่ TikTok</Button>
+                                    <Button size="small" onClick={() => handleClickItem(item.url, 'new_tab')}>เปิดแท็บใหม่</Button>
                                 </CardActions>
                                 </Card>
                             ))}
